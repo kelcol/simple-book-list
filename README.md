@@ -2,7 +2,7 @@
 
 A simple book list created with vanilla JavaScript.
 
-Created as part of Brad Traversy's Udemy course, [Modern JavaScript From The Beginning]([https://www.udemy.com/modern-javascript-from-the-beginning/learn/v4/content).
+Created as part of Brad Traversy's Udemy course, [Modern JavaScript From The Beginning](https://www.udemy.com/modern-javascript-from-the-beginning/learn/v4/content).
 
 Planned enhancements:
 - [ ] Further styling
