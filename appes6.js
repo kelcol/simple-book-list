@@ -59,20 +59,20 @@ class UI {
 class Store {
   static getBooks() {
     let books;
-    if(localStorage.getItem('books') === null) {
+    if (localStorage.getItem('books') === null) {
       books = [];
     } else {
       books = JSON.parse(localStorage.getItem('books'));
     }
     return books;
   }
-  
+
   static displayBooks() {
     const books = Store.getBooks();
-    
-    books.forEach(function(book){
+
+    books.forEach(function (book) {
       const ui = new UI;
-    
+
       // Add book to UI
       ui.addBookToList(book);
     });
@@ -80,22 +80,22 @@ class Store {
 
   static addBook(book) {
     const books = Store.getBooks();
-    
+
     books.push(book);
-localStorage.setItem('books', JSON.stringify(books));    
+    localStorage.setItem('books', JSON.stringify(books));
   }
 
   static removeBook(isbn) {
-    console.log(isbn);  
+    console.log(isbn);
     const books = Store.getBooks();
-    
-    books.forEach(function(book,index){
-      if(book.isbn === isbn) {
-        books.splice(index,1);
+
+    books.forEach(function (book, index) {
+      if (book.isbn === isbn) {
+        books.splice(index, 1);
       }
     });
 
-    localStorage.setItem('books',JSON.stringify(books));
+    localStorage.setItem('books', JSON.stringify(books));
   }
 }
 
@@ -122,7 +122,14 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
 
     // Error alert
     ui.showAlert("Please fill in all fields", 'error')
+
+    // Validate fields - check if valid ISBN
+  } else if (isValidISBN(isbn) === false) {
+
+    // Error alert
+    ui.showAlert("Please input a valid ISBN", 'error')
   } else {
+
     // Add book to list
     ui.addBookToList(book);
 
@@ -139,6 +146,39 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
 
   e.preventDefault();
 });
+
+
+// Validate ISBN
+
+function isValidISBN(isbn) {
+  console.log("Validating ISBN...");
+  isbn = isbn.replace(/[^\dX]/gi, '');
+  if (isbn.length == 10) {
+    let chars = isbn.split('');
+    if (chars[9].toUpperCase() == 'X') {
+      chars[9] = 10;
+    }
+    let sum = 0;
+    for (let i = 0; i < chars.length; i++) {
+      sum += ((10 - i) * parseInt(chars[i]));
+    }
+    return (sum % 11 == 0);
+  } else if (isbn.length == 13) {
+    let chars = isbn.split('');
+    let sum = 0;
+    for (let i = 0; i < chars.length; i++) {
+      if (i % 2 == 0) {
+        sum += parseInt(chars[i]);
+      } else {
+        sum += parseInt(chars[i]) * 3;
+      }
+    }
+    return (sum % 10 == 0);
+  } else {
+    return false;
+  }
+}
+
 
 // Event listener for delete
 document.getElementById('book-list').addEventListener('click', function (e) {
