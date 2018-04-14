@@ -74,11 +74,17 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
   const ui = new UI();
   console.log(ui);
 
-  // Validate 
+  // Validate fields - check if all filled
   if (title === '' || author === '' || isbn === '') {
 
     // Error alert
     ui.showAlert("Please fill in all fields", 'error')
+
+  // Validate fields - check if valid ISBN
+  } else if (isValidISBN (isbn) === false) {
+    // Error alert
+    ui.showAlert("Please input a valid ISBN", 'error')
+
   } else {
     // Add book to list
     ui.addBookToList(book);
@@ -92,6 +98,41 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
 
   e.preventDefault();
 });
+
+
+
+function isValidISBN (isbn) {
+  console.log("Validating ISBN...");
+  isbn = isbn.replace(/[^\dX]/gi, '');
+  if(isbn.length == 10) {
+          var chars = isbn.split('');
+          if(chars[9].toUpperCase() == 'X') {
+                  chars[9] = 10;
+          }
+          var sum = 0;
+          for(var i = 0; i < chars.length; i++) {
+                  sum += ((10-i) * parseInt(chars[i]));
+          }
+          return (sum % 11 == 0);
+  } else if(isbn.length == 13) {
+          var chars = isbn.split('');
+          var sum = 0;
+          for (var i = 0; i < chars.length; i++) {
+                  if(i % 2 == 0) {
+                          sum += parseInt(chars[i]);
+                  } else {
+                          sum += parseInt(chars[i]) * 3;
+                  }
+          }
+          return (sum % 10 == 0);
+  } else {
+          return false;
+  }
+}
+
+
+
+
 
 // Event listener for delete
 document.getElementById('book-list').addEventListener('click',function(e){
