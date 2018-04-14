@@ -45,8 +45,8 @@ UI.prototype.showAlert = function (message, className) {
 }
 
 // Delete book
-UI.prototype.deleteBook = function(target) {
-  if(target.className === 'delete') {
+UI.prototype.deleteBook = function (target) {
+  if (target.className === 'delete') {
     target.parentElement.parentElement.remove();
   }
 }
@@ -80,8 +80,8 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
     // Error alert
     ui.showAlert("Please fill in all fields", 'error')
 
-  // Validate fields - check if valid ISBN
-  } else if (isValidISBN (isbn) === false) {
+    // Validate fields - check if valid ISBN
+  } else if (isValidISBN(isbn) === false) {
     // Error alert
     ui.showAlert("Please input a valid ISBN", 'error')
 
@@ -101,32 +101,32 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
 
 
 
-function isValidISBN (isbn) {
+function isValidISBN(isbn) {
   console.log("Validating ISBN...");
   isbn = isbn.replace(/[^\dX]/gi, '');
-  if(isbn.length == 10) {
-          var chars = isbn.split('');
-          if(chars[9].toUpperCase() == 'X') {
-                  chars[9] = 10;
-          }
-          var sum = 0;
-          for(var i = 0; i < chars.length; i++) {
-                  sum += ((10-i) * parseInt(chars[i]));
-          }
-          return (sum % 11 == 0);
-  } else if(isbn.length == 13) {
-          var chars = isbn.split('');
-          var sum = 0;
-          for (var i = 0; i < chars.length; i++) {
-                  if(i % 2 == 0) {
-                          sum += parseInt(chars[i]);
-                  } else {
-                          sum += parseInt(chars[i]) * 3;
-                  }
-          }
-          return (sum % 10 == 0);
+  if (isbn.length == 10) {
+    let chars = isbn.split('');
+    if (chars[9].toUpperCase() == 'X') {
+      chars[9] = 10;
+    }
+    let sum = 0;
+    for (let i = 0; i < chars.length; i++) {
+      sum += ((10 - i) * parseInt(chars[i]));
+    }
+    return (sum % 11 == 0);
+  } else if (isbn.length == 13) {
+    let chars = isbn.split('');
+    let sum = 0;
+    for (let i = 0; i < chars.length; i++) {
+      if (i % 2 == 0) {
+        sum += parseInt(chars[i]);
+      } else {
+        sum += parseInt(chars[i]) * 3;
+      }
+    }
+    return (sum % 10 == 0);
   } else {
-          return false;
+    return false;
   }
 }
 
@@ -135,14 +135,14 @@ function isValidISBN (isbn) {
 
 
 // Event listener for delete
-document.getElementById('book-list').addEventListener('click',function(e){
-    // Instantiate UI
-    const ui = new UI();
-    ui.deleteBook(e.target);
+document.getElementById('book-list').addEventListener('click', function (e) {
+  // Instantiate UI
+  const ui = new UI();
+  ui.deleteBook(e.target);
 
-    // Show message
-    ui.showAlert('Book removed','success');
-  
+  // Show message
+  ui.showAlert('Book removed', 'success');
+
   e.preventDefault();
 
 })
