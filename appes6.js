@@ -1,9 +1,10 @@
 class Book {
-  constructor(title, author, isbn) {
+  constructor(title, author, isbn, pubdate) {
     this.title = title;
     this.author = author;
     this.isbn = isbn;
-  }
+    this.pubdate = pubdate;
+  };
 }
 
 class UI {
@@ -17,6 +18,7 @@ class UI {
   <td>${book.title}</td>
   <td>${book.author}</td>
   <td>${book.isbn}</td>
+  <td>${book.pubdate}</td>
   <td><a href="#" class="delete">X</a></td>
   `;
     list.appendChild(row);
@@ -51,8 +53,8 @@ class UI {
     document.getElementById('title').value = '';
     document.getElementById('author').value = '';
     document.getElementById('isbn').value = '';
+    document.getElementById('pubdate').value = '';
   }
-
 }
 
 // Local Storage Class
@@ -107,10 +109,12 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
   // Get form values
   const title = document.getElementById('title').value,
     author = document.getElementById('author').value,
-    isbn = document.getElementById('isbn').value
+    isbn = document.getElementById('isbn').value,
+    pubdate = document.getElementById('pubdate').value
 
   // Instantiate book
-  const book = new Book(title, author, isbn);
+  const book = new Book(title, author, isbn, pubdate);
+  console.log(book);
 
   // Instantiate UI
   const ui = new UI();
@@ -125,9 +129,13 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
 
     // Validate fields - check if valid ISBN
   } else if (isValidISBN(isbn) === false) {
-
     // Error alert
     ui.showAlert("Please input a valid ISBN", 'error')
+
+    // Validate pubdate - must be year in arabic numerals
+  } else if (isValidDate(pubdate, msg) === false) {
+    ui.showAlert(msg, 'error');
+
   } else {
 
     // Add book to list
@@ -149,7 +157,6 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
 
 
 // Validate ISBN
-
 function isValidISBN(isbn) {
   console.log("Validating ISBN...");
   isbn = isbn.replace(/[^\dX]/gi, '');
@@ -179,6 +186,29 @@ function isValidISBN(isbn) {
   }
 }
 
+// Validate publication date
+let msg;
+function isValidDate(pubdate) {
+  console.log("Validating date ...", pubdate, typeof pubdate);
+  let text = /^[0-9]+$/;
+  if (pubdate != 0) {
+    if ((pubdate != "") && (!text.test(pubdate))) {
+      msg = "Please only the year in numeric digits.";
+      return msg, false;
+    }
+
+    if (pubdate.length < 1) {
+      msg = "Year is not proper. Please check";
+      return msg, false;
+    }
+    let current_year = new Date().getFullYear();
+    if ((pubdate < 0) || (pubdate > current_year + 1)) {
+      msg = "That seems a bit far off in the future. Try again?";
+      return msg, false;
+    }
+    return true;
+  }
+}
 
 // Event listener for delete
 document.getElementById('book-list').addEventListener('click', function (e) {
@@ -189,7 +219,7 @@ document.getElementById('book-list').addEventListener('click', function (e) {
   ui.deleteBook(e.target);
 
   // Remove from LS
-  Store.removeBook(e.target.parentElement.previousElementSibling.textContent)
+  Store.removeBook(e.target.parentElement.previousElementSibling.previousElementSibling.textContent)
 
   // Show message
   ui.showAlert('Book removed', 'success');
