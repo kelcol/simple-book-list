@@ -3,7 +3,7 @@ function Book(title, author, isbn, pubdate) {
   this.title = title;
   this.author = author;
   this.isbn = isbn;
-  this.pubdate = pubdate;ds
+  this.pubdate = pubdate;
 }
 
 // UI Constructor
