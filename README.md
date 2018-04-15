@@ -6,7 +6,7 @@ Created as part of Brad Traversy's Udemy course, [Modern JavaScript From The Beg
 
 Planned enhancements:
 - [ ] Further styling
-- [ ] ISBN validation
+- [X] ISBN validation
 - [ ] Publication date with validation
 - [ ] Timestamp / display when added
 - [ ] Display deleted books in new table... hm, make this a legit "to-read" and "read" book list app!
