@@ -3,6 +3,7 @@ function Book(title, author, isbn, pubdate) {
   this.title = title;
   this.author = author;
   this.isbn = isbn;
+  this.pubdate = pubdate;ds
 }
 
 // UI Constructor
@@ -21,7 +22,6 @@ UI.prototype.addBookToList = function (book) {
   <td>${book.pubdate}</td>
   <td><a href="#" class="delete">X</a></td>
   `;
-
   list.appendChild(row);
 }
 
@@ -60,8 +60,6 @@ UI.prototype.clearFields = function () {
   document.getElementById('pubdate').value = '';
 }
 
-
-
 // Event Listeners for add book
 document.getElementById('book-form').addEventListener('submit', function (e) {
   // Get form values
@@ -88,10 +86,10 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
     // Error alert
     ui.showAlert("Please input a valid ISBN", 'error')
 
-  // } else if (pubdate !== '' || isValidDate(pubdate) === false) {
-  //   ui.showAlert("Please date as a year (YYYY)", 'error')
+  } else if (isValidDate(pubdate,msg) === false) {
+    ui.showAlert(msg, 'error')
 
-  } else {
+  } else {    
     // Add book to list
     ui.addBookToList(book);
 
@@ -136,14 +134,29 @@ function isValidISBN(isbn) {
 }
 
 // Validate publication date
-// function isValidDate(pubdate) {
-//   if (Number(pubdate) < 5)
-// } else {
-//   return false;
-// }
+let msg;
+function isValidDate(pubdate) {  
+  console.log("Validating date ...",pubdate, typeof pubdate);
+  let text = /^[0-9]+$/;
+  if (pubdate != 0) {
+      if ((pubdate != "") && (!text.test(pubdate))) {
+          msg = "Please only the year in numeric digits.";
+          return msg, false;
+      }
 
-
-
+      if (pubdate.length < 1) {
+          msg = "Year is not proper. Please check";
+          return msg, false;
+      }
+      let current_year=new Date().getFullYear();
+      if((pubdate < 0) || (pubdate > current_year + 1))
+          {
+          msg = "That seems a bit far off in the future. Try again?";
+          return msg, false;
+          }
+      return true;
+  }
+}
 
 // Event listener for delete
 document.getElementById('book-list').addEventListener('click', function (e) {
