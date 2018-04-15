@@ -1,5 +1,5 @@
 // Book constructor
-function Book(title, author, isbn) {
+function Book(title, author, isbn, pubdate) {
   this.title = title;
   this.author = author;
   this.isbn = isbn;
@@ -18,6 +18,7 @@ UI.prototype.addBookToList = function (book) {
   <td>${book.title}</td>
   <td>${book.author}</td>
   <td>${book.isbn}</td>
+  <td>${book.pubdate}</td>
   <td><a href="#" class="delete">X</a></td>
   `;
 
@@ -56,6 +57,7 @@ UI.prototype.clearFields = function () {
   document.getElementById('title').value = '';
   document.getElementById('author').value = '';
   document.getElementById('isbn').value = '';
+  document.getElementById('pubdate').value = '';
 }
 
 
@@ -65,10 +67,11 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
   // Get form values
   const title = document.getElementById('title').value,
     author = document.getElementById('author').value,
-    isbn = document.getElementById('isbn').value
+    isbn = document.getElementById('isbn').value,
+    pubdate = document.getElementById('pubdate').value
 
   // Instantiate book
-  const book = new Book(title, author, isbn);
+  const book = new Book(title, author, isbn, pubdate);
 
   // Instantiate UI
   const ui = new UI();
@@ -85,6 +88,9 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
     // Error alert
     ui.showAlert("Please input a valid ISBN", 'error')
 
+  // } else if (pubdate !== '' || isValidDate(pubdate) === false) {
+  //   ui.showAlert("Please date as a year (YYYY)", 'error')
+
   } else {
     // Add book to list
     ui.addBookToList(book);
@@ -99,8 +105,7 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
   e.preventDefault();
 });
 
-
-
+// Vaidate ISBN
 function isValidISBN(isbn) {
   console.log("Validating ISBN...");
   isbn = isbn.replace(/[^\dX]/gi, '');
@@ -130,6 +135,12 @@ function isValidISBN(isbn) {
   }
 }
 
+// Validate publication date
+// function isValidDate(pubdate) {
+//   if (Number(pubdate) < 5)
+// } else {
+//   return false;
+// }
 
 
 
